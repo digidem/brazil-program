@@ -4,6 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
 
 const fetchPartnerDetails = async (slug) => {
   // Simulated API call
@@ -23,8 +25,59 @@ const fetchPartnerDetails = async (slug) => {
     media_gallery: {
       images: ["https://via.placeholder.com/800x600", "https://via.placeholder.com/800x600", "https://via.placeholder.com/800x600"],
       videos: ["https://www.youtube.com/embed/dQw4w9WgXcQ"]
-    }
+    },
+    // New data for the map section
+    latitude: -3.4653,
+    longitude: -62.2159,
+    territory_size: 1000000,
+    population: 50000,
+    villages: 25,
+    ethnic_groups: ["Yanomami", "Ye'kwana"],
   };
+};
+
+const MapSection = ({ partner }) => {
+  return (
+    <section className="mb-16">
+      <h2 className="text-4xl font-bold mb-8">Territory Overview</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="bg-card rounded-lg overflow-hidden shadow-lg">
+          <MapContainer center={[partner.latitude, partner.longitude]} zoom={8} style={{ height: '400px', width: '100%' }}>
+            <TileLayer
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            />
+            <Marker position={[partner.latitude, partner.longitude]}>
+              <Popup>{partner.name}</Popup>
+            </Marker>
+          </MapContainer>
+        </div>
+        <Card className="hover-lift">
+          <CardContent className="p-8">
+            <h3 className="text-3xl font-semibold mb-4">Territory Statistics</h3>
+            <ul className="space-y-4">
+              <li className="flex justify-between items-center">
+                <span className="text-lg font-medium">Size:</span>
+                <span className="text-2xl font-bold">{partner.territory_size} hectares</span>
+              </li>
+              <li className="flex justify-between items-center">
+                <span className="text-lg font-medium">Population:</span>
+                <span className="text-2xl font-bold">{partner.population}</span>
+              </li>
+              <li className="flex justify-between items-center">
+                <span className="text-lg font-medium">Villages:</span>
+                <span className="text-2xl font-bold">{partner.villages}</span>
+              </li>
+              <li className="flex justify-between items-center">
+                <span className="text-lg font-medium">Ethnic Groups:</span>
+                <span className="text-2xl font-bold">{partner.ethnic_groups.join(', ')}</span>
+              </li>
+            </ul>
+          </CardContent>
+        </Card>
+      </div>
+    </section>
+  );
 };
 
 const PartnerDetail = () => {
@@ -94,6 +147,8 @@ const PartnerDetail = () => {
             </CardContent>
           </Card>
         </section>
+
+        <MapSection partner={partner} />
 
         <section className="mb-16">
           <h2 className="text-4xl font-bold mb-8">Impact Statement</h2>
