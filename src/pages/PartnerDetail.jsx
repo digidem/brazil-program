@@ -7,7 +7,7 @@ import PartnerHero from '../components/PartnerHero';
 import ProjectHighlight from '../components/ProjectHighlight';
 import MapSection from '../components/MapSection';
 import MediaGallery from '../components/MediaGallery';
-import { Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+import { Facebook, Twitter, Instagram, Linkedin, Youtube } from 'lucide-react';
 
 const fetchPartnerDetails = async (slug) => {
   // Simulated API call
@@ -39,6 +39,13 @@ const fetchPartnerDetails = async (slug) => {
     population: 50000,
     villages: 25,
     ethnic_groups: ["Yanomami", "Ye'kwana"],
+    social_media: {
+      facebook: "https://facebook.com/ecoguardians",
+      twitter: "https://twitter.com/ecoguardians",
+      instagram: "https://instagram.com/ecoguardians",
+      linkedin: "https://linkedin.com/company/ecoguardians",
+      youtube: "https://youtube.com/ecoguardians"
+    }
   };
 };
 
@@ -86,28 +93,36 @@ const PartnerDetail = () => {
 
       <footer className="bg-gray-800 py-12 mt-16">
         <div className="container mx-auto px-4">
-          <div className="flex flex-wrap justify-between items-center">
-            <div className="w-full md:w-1/3 mb-6 md:mb-0">
-              <h3 className="text-xl font-semibold mb-4 text-cyan-400">EcoGuardians</h3>
-              <p className="text-gray-400">&copy; 2024 Indigenous Land Defense. All rights reserved.</p>
+          <div className="flex flex-col items-center">
+            <h3 className="text-2xl font-semibold mb-6 text-cyan-400">Connect With {partner.name}</h3>
+            <div className="flex space-x-6">
+              {partner.social_media.facebook && (
+                <a href={partner.social_media.facebook} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors transform hover:scale-110">
+                  <Facebook size={32} />
+                </a>
+              )}
+              {partner.social_media.twitter && (
+                <a href={partner.social_media.twitter} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors transform hover:scale-110">
+                  <Twitter size={32} />
+                </a>
+              )}
+              {partner.social_media.instagram && (
+                <a href={partner.social_media.instagram} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors transform hover:scale-110">
+                  <Instagram size={32} />
+                </a>
+              )}
+              {partner.social_media.linkedin && (
+                <a href={partner.social_media.linkedin} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors transform hover:scale-110">
+                  <Linkedin size={32} />
+                </a>
+              )}
+              {partner.social_media.youtube && (
+                <a href={partner.social_media.youtube} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors transform hover:scale-110">
+                  <Youtube size={32} />
+                </a>
+              )}
             </div>
-            <div className="w-full md:w-1/3 mb-6 md:mb-0">
-              <h4 className="text-lg font-semibold mb-4 text-cyan-400">Quick Links</h4>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">About Us</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Our Projects</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Contact</a></li>
-              </ul>
-            </div>
-            <div className="w-full md:w-1/3">
-              <h4 className="text-lg font-semibold mb-4 text-cyan-400">Connect With Us</h4>
-              <div className="flex space-x-4">
-                <a href="#" className="text-gray-400 hover:text-white transition-colors"><Facebook size={24} /></a>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors"><Twitter size={24} /></a>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors"><Instagram size={24} /></a>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors"><Linkedin size={24} /></a>
-              </div>
-            </div>
+            <p className="mt-8 text-gray-400 text-center">&copy; 2024 {partner.name}. All rights reserved.</p>
           </div>
         </div>
       </footer>
