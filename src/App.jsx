@@ -4,18 +4,20 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import PartnerDetail from "./pages/PartnerDetail";
-const baseUrl = import.meta.env.BASE_URL || '/';
 
 const queryClient = new QueryClient();
+
+// Get the base URL from the environment variable or use a default
+const baseUrl = import.meta.env.BASE_URL || '/';
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
-      <BrowserRouter>
+      <BrowserRouter basename={baseUrl}>
         <Routes>
-          <Route path={`${baseUrl}`} element={<Home />} />
-          <Route path={`${baseUrl}/partners/:slug`} element={<PartnerDetail />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/partners/:slug" element={<PartnerDetail />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
