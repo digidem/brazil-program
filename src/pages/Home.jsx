@@ -99,7 +99,7 @@ const Home = () => {
             initial={{ y: 10, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 1, duration: 1, repeat: Infinity, repeatType: 'reverse' }}
-            className="mt-8"
+            className="mt-8 flex justify-center"
           >
             <ChevronDown size={32} className="text-white" />
           </motion.div>

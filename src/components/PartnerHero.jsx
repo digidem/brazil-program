@@ -14,9 +14,9 @@ const PartnerHero = ({ partner }) => {
   return (
     <header ref={heroRef} className="relative h-screen flex items-center justify-center overflow-hidden">
       <motion.div
-        style={{ y, opacity }}
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
+          y, opacity,
           backgroundImage: `url(${partner.heroImage || 'https://source.unsplash.com/random/1920x1080?rainforest'})`,
         }}
       />

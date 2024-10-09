@@ -31,11 +31,9 @@ const Navigation = () => {
         >
           <ArrowLeft size={24} />
         </button>
-        <div className="space-x-6">
+        {/* <div className="space-x-6">
           <Link to="/" className="text-white hover:text-cyan-400 transition-colors duration-300">Home</Link>
-          <Link to="/about" className="text-white hover:text-cyan-400 transition-colors duration-300">About</Link>
-          <Link to="/partners" className="text-white hover:text-cyan-400 transition-colors duration-300">Partners</Link>
-        </div>
+        </div> */}
       </div>
     </motion.nav>
   );
