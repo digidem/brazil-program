@@ -140,7 +140,7 @@ const Home = () => {
                   <p className="text-sm">{partner.description}</p>
                   <button 
                     className="mt-2 bg-green-500 text-white px-4 py-1 rounded hover:bg-green-600 transition-colors"
-                    onClick={() => window.location.href = `${baseUrl}/partners/${partner.slug}`}
+                    onClick={() => window.location.href = `${baseUrl}partners/${partner.slug}`}
                   >
                     Learn More
                   </button>
