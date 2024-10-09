@@ -140,7 +140,7 @@ const Home = () => {
                   <p className="text-sm">{partner.description}</p>
                   <button 
                     className="mt-2 bg-green-500 text-white px-4 py-1 rounded hover:bg-green-600 transition-colors"
-                    onClick={() => window.location.href = `${baseUrl}partners/${partner.slug}`}
+                    onClick={() => window.location.href = `#partners/${partner.slug}`}
                   >
                     Learn More
                   </button>
@@ -198,7 +198,7 @@ const Home = () => {
                     </div>
                   </div>
                   <a
-                    href={`/partners/${partner.slug}`}
+                    href={`/#partners/${partner.slug}`}
                     className="mt-2 block text-center bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors"
                   >
                     View Details
