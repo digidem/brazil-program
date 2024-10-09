@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Check, Tool } from 'lucide-react';
+import { Check, Wrench } from 'lucide-react';
 
 const ProjectHighlight = ({ project }) => {
   return (
@@ -42,7 +42,7 @@ const ProjectHighlight = ({ project }) => {
                 transition={{ duration: 0.3, delay: index * 0.1 }}
                 className="flex items-center bg-gray-700 rounded-full px-4 py-2"
               >
-                <Tool className="text-cyan-400 mr-2" size={16} />
+                <Wrench className="text-cyan-400 mr-2" size={16} />
                 <span className="text-sm text-gray-300">{tool}</span>
               </motion.div>
             ))}
