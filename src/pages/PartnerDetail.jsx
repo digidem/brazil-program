@@ -7,6 +7,7 @@ import PartnerHero from '../components/PartnerHero';
 import ProjectHighlight from '../components/ProjectHighlight';
 import MapSection from '../components/MapSection';
 import MediaGallery from '../components/MediaGallery';
+import DonateSection from '../components/DonateSection';
 import { Facebook, Twitter, Instagram, Linkedin, Youtube } from 'lucide-react';
 
 const fetchPartnerDetails = async (slug) => {
@@ -45,6 +46,12 @@ const fetchPartnerDetails = async (slug) => {
       instagram: "https://instagram.com/ecoguardians",
       linkedin: "https://linkedin.com/company/ecoguardians",
       youtube: "https://youtube.com/ecoguardians"
+    },
+    donation: {
+      openCollectiveUrl: "https://opencollective.com/ecoguardians",
+      pixQrCode: "https://via.placeholder.com/200x200?text=PIX+QR+Code",
+      totalRaised: 75000,
+      goal: 100000
     }
   };
 };
@@ -89,6 +96,8 @@ const PartnerDetail = () => {
         </motion.section>
 
         <MediaGallery media={partner.media_gallery} />
+        
+        <DonateSection donation={partner.donation} />
       </main>
 
       <footer className="bg-gray-800 py-12 mt-16">
