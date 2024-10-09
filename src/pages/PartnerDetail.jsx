@@ -1,11 +1,13 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import { motion } from 'framer-motion';
 import Navigation from '../components/Navigation';
 import PartnerHero from '../components/PartnerHero';
 import ProjectHighlight from '../components/ProjectHighlight';
 import MapSection from '../components/MapSection';
 import MediaGallery from '../components/MediaGallery';
+import { Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
 
 const fetchPartnerDetails = async (slug) => {
   // Simulated API call
@@ -59,21 +61,53 @@ const PartnerDetail = () => {
         <ProjectHighlight project={partner.project_highlight} />
         <MapSection partner={partner} />
 
-        <section className="mb-16">
-          <h2 className="text-4xl font-bold mb-8 text-center">Impact Statement</h2>
-          <blockquote className="text-2xl italic border-l-4 border-cyan-400 pl-6 py-2 text-gray-300 max-w-4xl mx-auto">
-            {partner.project_highlight.impact_statement}
-          </blockquote>
-        </section>
+        <motion.section 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+          className="relative py-24 my-16 bg-gradient-to-r from-green-900 to-blue-900 overflow-hidden"
+        >
+          <div className="absolute inset-0 bg-cover bg-center opacity-20" style={{backgroundImage: "url('https://source.unsplash.com/random/1920x1080?amazon-rainforest')"}}></div>
+          <div className="container mx-auto px-4 relative z-10">
+            <h2 className="text-4xl font-bold mb-8 text-center text-cyan-300">Impact Statement</h2>
+            <motion.blockquote 
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.5, duration: 0.8 }}
+              className="text-3xl italic text-center text-white max-w-4xl mx-auto leading-relaxed"
+            >
+              "{partner.project_highlight.impact_statement}"
+            </motion.blockquote>
+          </div>
+        </motion.section>
 
         <MediaGallery media={partner.media_gallery} />
       </main>
 
-      <footer className="bg-gray-800 py-8 mt-16">
-        <div className="container mx-auto px-4 flex justify-between items-center">
-          <p className="text-gray-400">&copy; 2024 Indigenous Land Defense. All rights reserved.</p>
-          <div className="flex space-x-4">
-            {/* Add social media icons here */}
+      <footer className="bg-gray-800 py-12 mt-16">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-wrap justify-between items-center">
+            <div className="w-full md:w-1/3 mb-6 md:mb-0">
+              <h3 className="text-xl font-semibold mb-4 text-cyan-400">EcoGuardians</h3>
+              <p className="text-gray-400">&copy; 2024 Indigenous Land Defense. All rights reserved.</p>
+            </div>
+            <div className="w-full md:w-1/3 mb-6 md:mb-0">
+              <h4 className="text-lg font-semibold mb-4 text-cyan-400">Quick Links</h4>
+              <ul className="space-y-2">
+                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">About Us</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Our Projects</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+              </ul>
+            </div>
+            <div className="w-full md:w-1/3">
+              <h4 className="text-lg font-semibold mb-4 text-cyan-400">Connect With Us</h4>
+              <div className="flex space-x-4">
+                <a href="#" className="text-gray-400 hover:text-white transition-colors"><Facebook size={24} /></a>
+                <a href="#" className="text-gray-400 hover:text-white transition-colors"><Twitter size={24} /></a>
+                <a href="#" className="text-gray-400 hover:text-white transition-colors"><Instagram size={24} /></a>
+                <a href="#" className="text-gray-400 hover:text-white transition-colors"><Linkedin size={24} /></a>
+              </div>
+            </div>
           </div>
         </div>
       </footer>
