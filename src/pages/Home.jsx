@@ -1,24 +1,30 @@
-import React, { useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { ArrowUpCircle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { motion } from 'framer-motion';
+import { Search, Menu } from 'lucide-react';
+import 'leaflet/dist/leaflet.css';
 
 const fetchPartners = async () => {
   // Simulated API call
   return [
     {
+      id: 1,
       name: "EcoGuardians",
       slug: "eco-guardians",
       logo: "https://via.placeholder.com/150",
-      description: "Protecting indigenous lands through innovative technology."
+      description: "Protecting indigenous lands through innovative technology.",
+      latitude: -3.4653,
+      longitude: -62.2159,
     },
     {
+      id: 2,
       name: "TerraDefenders",
       slug: "terra-defenders",
       logo: "https://via.placeholder.com/150",
-      description: "Empowering communities to preserve their natural heritage."
+      description: "Empowering communities to preserve their natural heritage.",
+      latitude: -5.2744,
+      longitude: -60.3756,
     },
     // Add more partner data as needed
   ];
@@ -30,84 +36,85 @@ const Home = () => {
     queryFn: fetchPartners,
   });
 
-  const heroRef = useRef(null);
-  const { scrollY } = useScroll();
-  const y = useTransform(scrollY, [0, 500], [0, 150]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollOffset = window.pageYOffset;
-      if (heroRef.current) {
-        heroRef.current.style.setProperty('--scroll-offset', `${scrollOffset * 0.5}px`);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   if (isLoading) return <div className="text-white text-center py-20">Loading...</div>;
   if (error) return <div className="text-white text-center py-20">An error occurred: {error.message}</div>;
 
+  const filteredPartners = partners.filter(partner =>
+    partner.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <header ref={heroRef} className="hero-parallax relative h-screen flex items-center justify-center overflow-hidden">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          className="text-center z-10"
+    <div className="h-screen w-full relative">
+      <MapContainer center={[-4.5, -60]} zoom={5} style={{ height: '100%', width: '100%' }}>
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        />
+        {filteredPartners.map((partner) => (
+          <Marker key={partner.id} position={[partner.latitude, partner.longitude]}>
+            <Popup>
+              <div className="text-center">
+                <img src={partner.logo} alt={partner.name} className="w-16 h-16 mx-auto mb-2 rounded-full" />
+                <h3 className="font-bold">{partner.name}</h3>
+                <p className="text-sm">{partner.description}</p>
+                <button 
+                  className="mt-2 bg-green-500 text-white px-4 py-1 rounded hover:bg-green-600 transition-colors"
+                  onClick={() => window.location.href = `/partners/${partner.slug}`}
+                >
+                  Learn More
+                </button>
+              </div>
+            </Popup>
+          </Marker>
+        ))}
+      </MapContainer>
+
+      <div className="absolute top-4 left-4 right-4 flex justify-between items-center z-[1000]">
+        <button
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          className="p-2 bg-white rounded-full shadow-md"
         >
-          <h1 className="text-6xl font-bold mb-4 fade-in">Defending Indigenous Lands</h1>
-          <p className="text-xl mb-8 fade-in">Together with our partners, we're preserving our planet's heritage.</p>
-          <Button className="text-lg px-8 py-3 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 neon-glow">
-            Learn More
-          </Button>
-        </motion.div>
-        <motion.div
-          className="absolute inset-0 z-0"
-          style={{ y }}
-        >
-          {/* Add a subtle background animation or pattern here */}
-        </motion.div>
-      </header>
-
-      <main className="container mx-auto px-4 py-16">
-        <h2 className="text-4xl font-bold mb-12 text-center">Our Partners</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {partners.map((partner) => (
-            <motion.div
-              key={partner.slug}
-              whileHover={{ scale: 1.05 }}
-              className="bg-card rounded-lg overflow-hidden shadow-lg hover-lift"
-            >
-              <Link to={`/partners/${partner.slug}`}>
-                <img src={partner.logo} alt={partner.name} className="w-full h-48 object-cover" />
-                <div className="p-6">
-                  <h3 className="text-2xl font-semibold mb-2">{partner.name}</h3>
-                  <p className="text-muted-foreground">{partner.description}</p>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
+          <Menu className="h-6 w-6 text-gray-700" />
+        </button>
+        <div className="flex-1 mx-4">
+          <input
+            type="text"
+            placeholder="Search partners..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full px-4 py-2 rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-green-500"
+          />
         </div>
-      </main>
+        <button className="p-2 bg-white rounded-full shadow-md">
+          <Search className="h-6 w-6 text-gray-700" />
+        </button>
+      </div>
 
-      <footer className="bg-secondary py-8 mt-16">
-        <div className="container mx-auto px-4 flex justify-between items-center">
-          <p>&copy; 2024 Indigenous Land Defense. All rights reserved.</p>
-          <div className="flex space-x-4">
-            {/* Add social media icons here */}
-          </div>
-        </div>
-      </footer>
-
-      <Button
-        className="fixed bottom-8 right-8 rounded-full p-2 bg-primary text-primary-foreground hover:bg-primary/90"
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      <motion.div
+        className="absolute top-0 left-0 h-full w-64 bg-white shadow-lg z-[1001]"
+        initial={{ x: '-100%' }}
+        animate={{ x: isSidebarOpen ? 0 : '-100%' }}
+        transition={{ duration: 0.3 }}
       >
-        <ArrowUpCircle size={24} />
-      </Button>
+        <div className="p-4">
+          <h2 className="text-2xl font-bold mb-4">Partners</h2>
+          <ul>
+            {partners.map((partner) => (
+              <li key={partner.id} className="mb-2">
+                <a
+                  href={`/partners/${partner.slug}`}
+                  className="text-blue-500 hover:underline"
+                >
+                  {partner.name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </motion.div>
     </div>
   );
 };
