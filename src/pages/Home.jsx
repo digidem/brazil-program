@@ -4,6 +4,7 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Search, Menu, X, ChevronDown } from 'lucide-react';
 import 'leaflet/dist/leaflet.css';
+const baseUrl = import.meta.env.BASE_URL || '/';
 
 const fetchPartners = async () => {
   // Simulated API call
@@ -125,8 +126,10 @@ const Home = () => {
       <div ref={mapRef} className="h-screen w-full relative">
         <MapContainer center={[-4.5, -60]} zoom={5} style={{ height: '100%', width: '100%' }}>
           <TileLayer
-            url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.jpg"
+            minZoom={0}
+            maxZoom={20}
+            attribution='&copy; CNES, Distribution Airbus DS, © Airbus DS, © PlanetObserver (Contains Copernicus Data) | &copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           />
           {filteredPartners.map((partner) => (
             <Marker key={partner.id} position={[partner.latitude, partner.longitude]}>
@@ -137,7 +140,7 @@ const Home = () => {
                   <p className="text-sm">{partner.description}</p>
                   <button 
                     className="mt-2 bg-green-500 text-white px-4 py-1 rounded hover:bg-green-600 transition-colors"
-                    onClick={() => window.location.href = `/partners/${partner.slug}`}
+                    onClick={() => window.location.href = `${baseUrl}partners/${partner.slug}`}
                   >
                     Learn More
                   </button>
