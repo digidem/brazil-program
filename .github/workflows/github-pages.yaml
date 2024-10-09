@@ -19,4 +19,4 @@ jobs:
       - name: Build and Deploy
         uses: ./.github/actions/build-and-deploy
         with:
-          base_url: /${{ github.event.repository.name }}
+          BASE_URL: /${{ github.event.repository.name }}/

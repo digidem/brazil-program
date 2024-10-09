@@ -8,7 +8,7 @@ import PartnerDetail from "./pages/PartnerDetail";
 const queryClient = new QueryClient();
 
 // Get the base URL from the environment variable or use a default
-const baseUrl = import.meta.env.BASE_URL || '/';
+const baseUrl = import.meta.env.BASE_URL || `/${process.env.REACT_APP_REPO_NAME}/`;
 
 const App = () => (
   <QueryClientProvider client={queryClient}>

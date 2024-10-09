@@ -71,7 +71,7 @@ const PartnerDetail = () => {
   if (error) return <div className="text-white text-center py-20">An error occurred: {error.message}</div>;
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
+    <div className="min-h-screen bg-gray-900 text-white" data-base-url={process.env.BASE_URL}>
       <Navigation />
       <PartnerHero partner={partner} />
 

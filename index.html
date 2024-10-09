@@ -12,5 +12,11 @@
     <div id="root"></div>
     <script src="/.gpt_engineer/index.js" type="module"></script>
     <script type="module" src="/src/main.jsx"></script>
+    <!-- Catch-all redirect for SPA routing -->
+    <script type="text/javascript">
+      if (location.pathname !== '/' && !location.pathname.startsWith('/partners/')) {
+        location.href = '/index.html';
+      }
+    </script>
   </body>
 </html>

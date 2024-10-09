@@ -9,7 +9,7 @@ export default defineConfig({
     host: "::",
     port: "8080",
   },
-  base: process.env.BASE_URL || '/',
+  base: process.env.BASE_URL || `/${process.env.npm_package_name}/`,
   plugins: [react()],
   resolve: {
     alias: [
