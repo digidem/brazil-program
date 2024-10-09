@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { Search, Menu } from 'lucide-react';
 import 'leaflet/dist/leaflet.css';
 
@@ -38,6 +38,25 @@ const Home = () => {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const heroRef = useRef(null);
+  const mapRef = useRef(null);
+  const { scrollY } = useScroll();
+  const y = useTransform(scrollY, [0, 500], [0, 150]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollOffset = window.pageYOffset;
+      if (heroRef.current) {
+        heroRef.current.style.setProperty('--scroll-offset', `${scrollOffset * 0.5}px`);
+      }
+      if (mapRef.current && scrollOffset > window.innerHeight / 2) {
+        mapRef.current.scrollIntoView({ behavior: 'smooth' });
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   if (isLoading) return <div className="text-white text-center py-20">Loading...</div>;
   if (error) return <div className="text-white text-center py-20">An error occurred: {error.message}</div>;
@@ -47,74 +66,97 @@ const Home = () => {
   );
 
   return (
-    <div className="h-screen w-full relative">
-      <MapContainer center={[-4.5, -60]} zoom={5} style={{ height: '100%', width: '100%' }}>
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        />
-        {filteredPartners.map((partner) => (
-          <Marker key={partner.id} position={[partner.latitude, partner.longitude]}>
-            <Popup>
-              <div className="text-center">
-                <img src={partner.logo} alt={partner.name} className="w-16 h-16 mx-auto mb-2 rounded-full" />
-                <h3 className="font-bold">{partner.name}</h3>
-                <p className="text-sm">{partner.description}</p>
-                <button 
-                  className="mt-2 bg-green-500 text-white px-4 py-1 rounded hover:bg-green-600 transition-colors"
-                  onClick={() => window.location.href = `/partners/${partner.slug}`}
-                >
-                  Learn More
-                </button>
-              </div>
-            </Popup>
-          </Marker>
-        ))}
-      </MapContainer>
-
-      <div className="absolute top-4 left-4 right-4 flex justify-between items-center z-[1000]">
-        <button
-          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-          className="p-2 bg-white rounded-full shadow-md"
+    <div className="min-h-screen">
+      <header ref={heroRef} className="hero-parallax relative h-screen flex items-center justify-center overflow-hidden">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+          className="text-center z-10"
         >
-          <Menu className="h-6 w-6 text-gray-700" />
-        </button>
-        <div className="flex-1 mx-4">
-          <input
-            type="text"
-            placeholder="Search partners..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full px-4 py-2 rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
-        </div>
-        <button className="p-2 bg-white rounded-full shadow-md">
-          <Search className="h-6 w-6 text-gray-700" />
-        </button>
-      </div>
+          <h1 className="text-6xl font-bold mb-4 fade-in">Defending Indigenous Lands</h1>
+          <p className="text-xl mb-8 fade-in">Together with our partners, we're preserving our planet's heritage.</p>
+          <button className="text-lg px-8 py-3 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 neon-glow">
+            Learn More
+          </button>
+        </motion.div>
+        <motion.div
+          className="absolute inset-0 z-0"
+          style={{ y }}
+        >
+          {/* Add a subtle background animation or pattern here */}
+        </motion.div>
+      </header>
 
-      <motion.div
-        className="absolute top-0 left-0 h-full w-64 bg-white shadow-lg z-[1001]"
-        initial={{ x: '-100%' }}
-        animate={{ x: isSidebarOpen ? 0 : '-100%' }}
-        transition={{ duration: 0.3 }}
-      >
-        <div className="p-4">
-          <h2 className="text-2xl font-bold mb-4">Partners</h2>
-          <ul>
-            {partners.map((partner) => (
-              <li key={partner.id} className="mb-2">
-                <a
-                  href={`/partners/${partner.slug}`}
-                  className="text-blue-500 hover:underline"
-                >
-                  {partner.name}
-                </a>
-              </li>
-            ))}
-          </ul>
+      <div ref={mapRef} className="h-screen w-full relative">
+        <MapContainer center={[-4.5, -60]} zoom={5} style={{ height: '100%', width: '100%' }}>
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          />
+          {filteredPartners.map((partner) => (
+            <Marker key={partner.id} position={[partner.latitude, partner.longitude]}>
+              <Popup>
+                <div className="text-center">
+                  <img src={partner.logo} alt={partner.name} className="w-16 h-16 mx-auto mb-2 rounded-full" />
+                  <h3 className="font-bold">{partner.name}</h3>
+                  <p className="text-sm">{partner.description}</p>
+                  <button 
+                    className="mt-2 bg-green-500 text-white px-4 py-1 rounded hover:bg-green-600 transition-colors"
+                    onClick={() => window.location.href = `/partners/${partner.slug}`}
+                  >
+                    Learn More
+                  </button>
+                </div>
+              </Popup>
+            </Marker>
+          ))}
+        </MapContainer>
+
+        <div className="absolute top-4 right-4 flex items-center z-[1000]">
+          <div className="mr-2">
+            <input
+              type="text"
+              placeholder="Search partners..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="px-4 py-2 rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            />
+          </div>
+          <button className="p-2 bg-white rounded-full shadow-md mr-2">
+            <Search className="h-6 w-6 text-gray-700" />
+          </button>
+          <button
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            className="p-2 bg-white rounded-full shadow-md"
+          >
+            <Menu className="h-6 w-6 text-gray-700" />
+          </button>
         </div>
-      </motion.div>
+
+        <motion.div
+          className="absolute top-0 right-0 h-full w-64 bg-white shadow-lg z-[1001]"
+          initial={{ x: '100%' }}
+          animate={{ x: isSidebarOpen ? 0 : '100%' }}
+          transition={{ duration: 0.3 }}
+        >
+          <div className="p-4">
+            <h2 className="text-2xl font-bold mb-4">Partners</h2>
+            <ul>
+              {partners.map((partner) => (
+                <li key={partner.id} className="mb-2">
+                  <a
+                    href={`/partners/${partner.slug}`}
+                    className="text-blue-500 hover:underline"
+                  >
+                    {partner.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </motion.div>
+      </div>
     </div>
   );
 };
