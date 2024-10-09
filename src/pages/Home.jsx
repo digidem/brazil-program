@@ -87,7 +87,7 @@ const Home = () => {
           muted
           className="absolute w-full h-full object-cover"
         >
-          <source src="https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-a-forest-on-a-sunny-day-41465-large.mp4" type="video/mp4" />
+          <source src="https://videos.pexels.com/video-files/4051989/4051989-sd_640_360_30fps.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
         <div className="absolute inset-0 bg-black opacity-50"></div>
@@ -125,7 +125,7 @@ const Home = () => {
       <div ref={mapRef} className="h-screen w-full relative">
         <MapContainer center={[-4.5, -60]} zoom={5} style={{ height: '100%', width: '100%' }}>
           <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           />
           {filteredPartners.map((partner) => (
