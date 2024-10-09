@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { Search, Menu } from 'lucide-react';
+import { Search, Menu, X, ChevronDown } from 'lucide-react';
 import 'leaflet/dist/leaflet.css';
 
 const fetchPartners = async () => {
@@ -40,6 +40,7 @@ const Home = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const heroRef = useRef(null);
   const mapRef = useRef(null);
+  const sidebarRef = useRef(null);
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 500], [0, 150]);
 
@@ -49,14 +50,26 @@ const Home = () => {
       if (heroRef.current) {
         heroRef.current.style.setProperty('--scroll-offset', `${scrollOffset * 0.5}px`);
       }
-      if (mapRef.current && scrollOffset > window.innerHeight / 2) {
-        mapRef.current.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    const handleClickOutside = (event) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        setIsSidebarOpen(false);
       }
     };
 
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, []);
+
+  const scrollToMap = () => {
+    mapRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   if (isLoading) return <div className="text-white text-center py-20">Loading...</div>;
   if (error) return <div className="text-white text-center py-20">An error occurred: {error.message}</div>;
@@ -76,9 +89,20 @@ const Home = () => {
         >
           <h1 className="text-6xl font-bold mb-4 fade-in">Defending Indigenous Lands</h1>
           <p className="text-xl mb-8 fade-in">Together with our partners, we're preserving our planet's heritage.</p>
-          <button className="text-lg px-8 py-3 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 neon-glow">
-            Learn More
+          <button 
+            onClick={scrollToMap}
+            className="text-lg px-8 py-3 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 neon-glow"
+          >
+            Partner Map
           </button>
+          <motion.div
+            initial={{ y: 10, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 1, duration: 1, repeat: Infinity, repeatType: 'reverse' }}
+            className="mt-8"
+          >
+            <ChevronDown size={32} className="text-white" />
+          </motion.div>
         </motion.div>
         <motion.div
           className="absolute inset-0 z-0"
@@ -114,18 +138,16 @@ const Home = () => {
         </MapContainer>
 
         <div className="absolute top-4 right-4 flex items-center z-[1000]">
-          <div className="mr-2">
+          <div className="mr-2 relative">
             <input
               type="text"
               placeholder="Search partners..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="px-4 py-2 rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="px-4 py-2 rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-green-500 pr-10"
             />
+            <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
           </div>
-          <button className="p-2 bg-white rounded-full shadow-md mr-2">
-            <Search className="h-6 w-6 text-gray-700" />
-          </button>
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             className="p-2 bg-white rounded-full shadow-md"
@@ -134,14 +156,24 @@ const Home = () => {
           </button>
         </div>
 
+        {isSidebarOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 z-[1001]" onClick={() => setIsSidebarOpen(false)}></div>
+        )}
+
         <motion.div
-          className="absolute top-0 right-0 h-full w-64 bg-white shadow-lg z-[1001]"
+          ref={sidebarRef}
+          className="fixed top-0 right-0 h-full w-64 bg-white shadow-lg z-[1002]"
           initial={{ x: '100%' }}
           animate={{ x: isSidebarOpen ? 0 : '100%' }}
           transition={{ duration: 0.3 }}
         >
           <div className="p-4">
-            <h2 className="text-2xl font-bold mb-4">Partners</h2>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-bold">Partners</h2>
+              <button onClick={() => setIsSidebarOpen(false)} className="p-1 hover:bg-gray-200 rounded-full">
+                <X className="h-6 w-6 text-gray-700" />
+              </button>
+            </div>
             <ul>
               {partners.map((partner) => (
                 <li key={partner.id} className="mb-2">
