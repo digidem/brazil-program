@@ -15,8 +15,8 @@ const fetchPartnerDetails = async (slug) => {
   return {
     name: "EcoGuardians",
     slug: "eco-guardians",
-    logo: "https://via.placeholder.com/150",
-    heroImage: "https://source.unsplash.com/random/1920x1080?rainforest",
+    logo: "https://picsum.photos/seed/eco1/150",
+    heroImage: "https://picsum.photos/seed/rainforest/1920/1080",
     description: "EcoGuardians is at the forefront of protecting indigenous lands through innovative technology and community engagement.",
     project_highlight: {
       title: "Project Rainforest Shield",
@@ -31,7 +31,11 @@ const fetchPartnerDetails = async (slug) => {
       impact_statement: "Project Rainforest Shield has not only preserved critical ecosystems but has also empowered indigenous communities to become the guardians of their ancestral lands, ensuring a sustainable future for generations to come."
     },
     media_gallery: {
-      images: ["https://source.unsplash.com/random/800x600?amazon", "https://source.unsplash.com/random/800x600?forest", "https://source.unsplash.com/random/800x600?indigenous"],
+      images: [
+        "https://picsum.photos/seed/amazon/800/600",
+        "https://picsum.photos/seed/forest/800/600",
+        "https://picsum.photos/seed/indigenous/800/600"
+      ],
       videos: ["https://www.youtube.com/embed/dQw4w9WgXcQ"]
     },
     latitude: -3.4653,
@@ -49,7 +53,7 @@ const fetchPartnerDetails = async (slug) => {
     },
     donation: {
       openCollectiveUrl: "https://opencollective.com/ecoguardians",
-      pixQrCode: "https://via.placeholder.com/200x200?text=PIX+QR+Code",
+      pixQrCode: "https://picsum.photos/seed/pix/200/200",
       totalRaised: 75000,
       goal: 100000
     }
@@ -81,7 +85,7 @@ const PartnerDetail = () => {
           transition={{ duration: 1 }}
           className="relative py-24 my-16 bg-gradient-to-r from-green-900 to-blue-900 overflow-hidden"
         >
-          <div className="absolute inset-0 bg-cover bg-center opacity-20" style={{backgroundImage: "url('https://source.unsplash.com/random/1920x1080?amazon-rainforest')"}}></div>
+          <div className="absolute inset-0 bg-cover bg-center opacity-20" style={{backgroundImage: "url('https://picsum.photos/seed/amazon-rainforest/1920/1080')"}}></div>
           <div className="container mx-auto px-4 relative z-10">
             <h2 className="text-4xl font-bold mb-8 text-center text-cyan-300">Impact Statement</h2>
             <motion.blockquote 

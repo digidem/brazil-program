@@ -12,7 +12,7 @@ const fetchPartners = async () => {
       id: 1,
       name: "EcoGuardians",
       slug: "eco-guardians",
-      logo: "https://via.placeholder.com/150",
+      logo: "https://picsum.photos/seed/eco1/150",
       description: "Protecting indigenous lands through innovative technology.",
       latitude: -3.4653,
       longitude: -62.2159,
@@ -21,7 +21,7 @@ const fetchPartners = async () => {
       id: 2,
       name: "TerraDefenders",
       slug: "terra-defenders",
-      logo: "https://via.placeholder.com/150",
+      logo: "https://picsum.photos/seed/terra2/150",
       description: "Empowering communities to preserve their natural heritage.",
       latitude: -5.2744,
       longitude: -60.3756,
@@ -81,14 +81,24 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       <header ref={heroRef} className="hero-parallax relative h-screen flex items-center justify-center overflow-hidden">
+        <video
+          autoPlay
+          loop
+          muted
+          className="absolute w-full h-full object-cover"
+        >
+          <source src="https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-a-forest-on-a-sunny-day-41465-large.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <div className="absolute inset-0 bg-black opacity-50"></div>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
           className="text-center z-10"
         >
-          <h1 className="text-6xl font-bold mb-4 fade-in">Defending Indigenous Lands</h1>
-          <p className="text-xl mb-8 fade-in">Together with our partners, we're preserving our planet's heritage.</p>
+          <h1 className="text-6xl font-bold mb-4 fade-in text-white">Defending Indigenous Lands</h1>
+          <p className="text-xl mb-8 fade-in text-white">Together with our partners, we're preserving our planet's heritage.</p>
           <button 
             onClick={scrollToMap}
             className="text-lg px-8 py-3 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 neon-glow"
@@ -162,30 +172,37 @@ const Home = () => {
 
         <motion.div
           ref={sidebarRef}
-          className="fixed top-0 right-0 h-full w-64 bg-white shadow-lg z-[1002]"
+          className="fixed top-0 right-0 h-full w-80 bg-white shadow-lg z-[1002] overflow-y-auto"
           initial={{ x: '100%' }}
           animate={{ x: isSidebarOpen ? 0 : '100%' }}
           transition={{ duration: 0.3 }}
         >
           <div className="p-4">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-bold">Partners</h2>
+              <h2 className="text-2xl font-bold text-gray-800">Partners</h2>
               <button onClick={() => setIsSidebarOpen(false)} className="p-1 hover:bg-gray-200 rounded-full">
                 <X className="h-6 w-6 text-gray-700" />
               </button>
             </div>
-            <ul>
+            <div className="space-y-4">
               {partners.map((partner) => (
-                <li key={partner.id} className="mb-2">
+                <div key={partner.id} className="bg-gray-100 rounded-lg p-4 shadow hover:shadow-md transition-shadow">
+                  <div className="flex items-center space-x-4">
+                    <img src={partner.logo} alt={partner.name} className="w-12 h-12 rounded-full" />
+                    <div>
+                      <h3 className="font-semibold text-gray-800">{partner.name}</h3>
+                      <p className="text-sm text-gray-600">{partner.description}</p>
+                    </div>
+                  </div>
                   <a
                     href={`/partners/${partner.slug}`}
-                    className="text-blue-500 hover:underline"
+                    className="mt-2 block text-center bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors"
                   >
-                    {partner.name}
+                    View Details
                   </a>
-                </li>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
         </motion.div>
       </div>
