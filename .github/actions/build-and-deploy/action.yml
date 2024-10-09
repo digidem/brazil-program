@@ -1,0 +1,36 @@
+name: 'Build and Deploy'
+description: 'Build the project and deploy to GitHub Pages'
+
+inputs:
+  base_url:
+    description: 'Base URL for the website'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Bun
+      uses: oven-sh/setup-bun@v2
+      with:
+        bun-version: latest
+
+    - name: Install dependencies
+      shell: bash
+      run: bun install
+
+    - name: Build the project
+      shell: bash
+      env:
+        BASE_URL: ${{ inputs.base_url }}
+      run: bun run build
+
+    - name: List build directory contents
+      shell: bash
+      run: ls -R ./dist
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ github.token }}
+        publish_dir: ./dist
+        publish_branch: gh-pages
