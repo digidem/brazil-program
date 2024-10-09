@@ -1,35 +1,36 @@
 import React, { useRef, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 const PartnerHero = ({ partner }) => {
   const heroRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"]
+  });
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollOffset = window.pageYOffset;
-      if (heroRef.current) {
-        heroRef.current.style.setProperty('--scroll-offset', `${scrollOffset * 0.5}px`);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
+  const opacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
 
   return (
-    <header ref={heroRef} className="hero-parallax relative h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-gray-900 to-gray-800">
+    <header ref={heroRef} className="relative h-screen flex items-center justify-center overflow-hidden">
+      <motion.div
+        style={{ y, opacity }}
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: `url(${partner.heroImage || 'https://source.unsplash.com/random/1920x1080?rainforest'})`,
+        }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-gray-900 opacity-75" />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
-        className="text-center z-10"
+        className="relative z-10 text-center px-4"
       >
-        <img src={partner.logo} alt={partner.name} className="w-48 h-48 object-cover mb-8 mx-auto rounded-full fade-in shadow-lg" />
-        <h1 className="text-6xl font-bold mb-4 fade-in text-white tracking-tight">{partner.name}</h1>
-        <p className="text-xl mb-8 fade-in max-w-2xl mx-auto text-gray-300">{partner.description}</p>
+        <img src={partner.logo} alt={partner.name} className="w-32 h-32 object-cover mb-8 mx-auto rounded-full shadow-lg" />
+        <h1 className="text-6xl font-bold mb-4 text-white tracking-tight">{partner.name}</h1>
+        <p className="text-xl mb-8 max-w-2xl mx-auto text-gray-300">{partner.description}</p>
       </motion.div>
-      <div className="absolute inset-0 bg-black opacity-50"></div>
-      <div className="absolute inset-0 bg-gradient-to-t from-transparent to-gray-900 opacity-75"></div>
     </header>
   );
 };

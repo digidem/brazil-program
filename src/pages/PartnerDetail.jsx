@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { motion } from 'framer-motion';
+import Navigation from '../components/Navigation';
 import PartnerHero from '../components/PartnerHero';
 import ProjectHighlight from '../components/ProjectHighlight';
 import MapSection from '../components/MapSection';
@@ -13,17 +13,22 @@ const fetchPartnerDetails = async (slug) => {
     name: "EcoGuardians",
     slug: "eco-guardians",
     logo: "https://via.placeholder.com/150",
+    heroImage: "https://source.unsplash.com/random/1920x1080?rainforest",
     description: "EcoGuardians is at the forefront of protecting indigenous lands through innovative technology and community engagement.",
     project_highlight: {
       title: "Project Rainforest Shield",
       summary: "An initiative to protect 1 million acres of Amazon rainforest using advanced satellite monitoring and community-led conservation efforts.",
-      objectives: ["Implement real-time deforestation alerts", "Train 500 indigenous rangers in conservation technology", "Establish sustainable agroforestry practices"],
+      objectives: [
+        "Implement real-time deforestation alerts",
+        "Train 500 indigenous rangers in conservation technology",
+        "Establish sustainable agroforestry practices"
+      ],
       tools_used: ["Mapeo", "TerraStories", "Satellite Imagery Analysis"],
       results: "Reduced deforestation by 75% in target areas and improved livelihoods for 10,000 indigenous community members.",
       impact_statement: "Project Rainforest Shield has not only preserved critical ecosystems but has also empowered indigenous communities to become the guardians of their ancestral lands, ensuring a sustainable future for generations to come."
     },
     media_gallery: {
-      images: ["https://via.placeholder.com/800x600", "https://via.placeholder.com/800x600", "https://via.placeholder.com/800x600"],
+      images: ["https://source.unsplash.com/random/800x600?amazon", "https://source.unsplash.com/random/800x600?forest", "https://source.unsplash.com/random/800x600?indigenous"],
       videos: ["https://www.youtube.com/embed/dQw4w9WgXcQ"]
     },
     latitude: -3.4653,
@@ -47,6 +52,7 @@ const PartnerDetail = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
+      <Navigation />
       <PartnerHero partner={partner} />
 
       <main className="container mx-auto px-4 py-16">
@@ -54,8 +60,8 @@ const PartnerDetail = () => {
         <MapSection partner={partner} />
 
         <section className="mb-16">
-          <h2 className="text-4xl font-bold mb-8">Impact Statement</h2>
-          <blockquote className="text-2xl italic border-l-4 border-cyan-400 pl-6 py-2 text-gray-300">
+          <h2 className="text-4xl font-bold mb-8 text-center">Impact Statement</h2>
+          <blockquote className="text-2xl italic border-l-4 border-cyan-400 pl-6 py-2 text-gray-300 max-w-4xl mx-auto">
             {partner.project_highlight.impact_statement}
           </blockquote>
         </section>
@@ -71,15 +77,6 @@ const PartnerDetail = () => {
           </div>
         </div>
       </footer>
-
-      <button
-        className="fixed bottom-8 right-8 rounded-full p-2 bg-cyan-500 text-white hover:bg-cyan-600 transition-colors duration-300"
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
-        </svg>
-      </button>
     </div>
   );
 };
