@@ -1,80 +1,55 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import { Users, Home, Globe } from 'lucide-react';
+import { Search, Menu } from 'lucide-react';
 
-const MapSection = ({ partner }) => {
+const MapSection = ({ mapRef, filteredPartners, searchTerm, setSearchTerm, setIsSidebarOpen }) => {
   return (
-    <section className="mb-16 px-4">
-      <motion.h2 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="text-4xl font-bold mb-8 text-white text-center"
-      >
-        Territory Overview
-      </motion.h2>
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-        <motion.div 
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5 }}
-          className="bg-gray-800 rounded-3xl overflow-hidden shadow-2xl"
+    <div ref={mapRef} className="h-screen w-full relative">
+      <MapContainer center={[-4.5, -60]} zoom={5} style={{ height: '100%', width: '100%' }}>
+        <TileLayer
+          url="https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.jpg"
+          minZoom={0}
+          maxZoom={20}
+          attribution='&copy; CNES, Distribution Airbus DS, © Airbus DS, © PlanetObserver (Contains Copernicus Data) | &copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        />
+        {filteredPartners.map((partner) => (
+          <Marker key={partner.id} position={[partner.latitude, partner.longitude]}>
+            <Popup>
+              <div className="text-center">
+                <img src={partner.logo} alt={partner.name} className="w-16 h-16 mx-auto mb-2 rounded-full" />
+                <h3 className="font-bold">{partner.name}</h3>
+                <p className="text-sm">{partner.description}</p>
+                <button 
+                  className="mt-2 bg-green-500 text-white px-4 py-1 rounded hover:bg-green-600 transition-colors"
+                  onClick={() => window.location.href = `#partners/${partner.slug}`}
+                >
+                  Learn More
+                </button>
+              </div>
+            </Popup>
+          </Marker>
+        ))}
+      </MapContainer>
+
+      <div className="absolute top-4 right-4 flex items-center z-[1000]">
+        <div className="mr-2 relative">
+          <input
+            type="text"
+            placeholder="Search partners..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="px-4 py-2 rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-green-500 pr-10"
+          />
+          <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+        </div>
+        <button
+          onClick={() => setIsSidebarOpen(true)}
+          className="p-2 bg-white rounded-full shadow-md"
         >
-          <MapContainer center={[partner.latitude, partner.longitude]} zoom={8} style={{ height: '400px', width: '100%' }}>
-            <TileLayer
-              url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-            />
-            <Marker position={[partner.latitude, partner.longitude]}>
-              <Popup>{partner.name}</Popup>
-            </Marker>
-          </MapContainer>
-        </motion.div>
-        <motion.div 
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5 }}
-          className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-3xl overflow-hidden shadow-2xl p-8"
-        >
-          <h3 className="text-3xl font-semibold mb-6 text-white">Territory Statistics</h3>
-          <ul className="space-y-6">
-            <li className="flex items-center">
-              <Globe className="text-cyan-400 mr-4" size={24} />
-              <div>
-                <span className="text-lg font-medium text-gray-300">Size:</span>
-                <span className="block text-2xl font-bold text-white">{partner.territory_size} hectares</span>
-              </div>
-            </li>
-            <li className="flex items-center">
-              <Users className="text-cyan-400 mr-4" size={24} />
-              <div>
-                <span className="text-lg font-medium text-gray-300">Population:</span>
-                <span className="block text-2xl font-bold text-white">{partner.population}</span>
-              </div>
-            </li>
-            <li className="flex items-center">
-              <Home className="text-cyan-400 mr-4" size={24} />
-              <div>
-                <span className="text-lg font-medium text-gray-300">Villages:</span>
-                <span className="block text-2xl font-bold text-white">{partner.villages}</span>
-              </div>
-            </li>
-            <li>
-              <span className="text-lg font-medium text-gray-300">Ethnic Groups:</span>
-              <div className="mt-2 flex flex-wrap gap-2">
-                {partner.ethnic_groups.map((group, index) => (
-                  <span key={index} className="bg-gray-700 text-white px-3 py-1 rounded-full text-sm">
-                    {group}
-                  </span>
-                ))}
-              </div>
-            </li>
-          </ul>
-        </motion.div>
+          <Menu className="h-6 w-6 text-gray-700" />
+        </button>
       </div>
-    </section>
+    </div>
   );
 };
 
