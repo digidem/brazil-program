@@ -80,16 +80,16 @@ const PartnerDetail = () => {
 
       <main className="container mx-auto px-4 py-16">
         <ProjectHighlight project={partner.project_highlight} />
-        
+
         <div className="my-16 bg-gray-800 rounded-lg p-8">
           <h2 className="text-3xl font-bold mb-6 text-cyan-300">Partner Territory</h2>
           <div className="flex flex-col lg:flex-row gap-8">
             <div className="w-full lg:w-1/2 xl:w-2/3">
               <div className="rounded-lg overflow-hidden shadow-xl">
-                <MapSection 
-                  filteredPartners={[partner]} 
-                  noSideBar 
-                  className="h-[400px] lg:h-[500px] w-full" 
+                <MapSection
+                  filteredPartners={[partner]}
+                  noSideBar
+                  className="h-[400px] lg:h-[500px] w-full"
                 />
               </div>
             </div>
@@ -119,7 +119,7 @@ const PartnerDetail = () => {
           </div>
         </div>
 
-        <motion.section 
+        <motion.section
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1 }}
@@ -128,7 +128,7 @@ const PartnerDetail = () => {
           <div className="absolute inset-0 bg-cover bg-center opacity-20" style={{backgroundImage: "url('https://picsum.photos/seed/amazon-rainforest/1920/1080')"}}></div>
           <div className="container mx-auto px-4 relative z-10">
             <h2 className="text-4xl font-bold mb-8 text-center text-cyan-300">Impact Statement</h2>
-            <motion.blockquote 
+            <motion.blockquote
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.5, duration: 0.8 }}
@@ -140,7 +140,7 @@ const PartnerDetail = () => {
         </motion.section>
 
         <MediaGallery media={partner.media_gallery} />
-        
+
         <DonateSection donation={partner.donation} />
       </main>
 

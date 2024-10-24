@@ -18,8 +18,8 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen, partners }) => {
         <div className="p-4">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-2xl font-bold text-cyan-300">Partners</h2>
-            <button 
-              onClick={() => setIsSidebarOpen(false)} 
+            <button
+              onClick={() => setIsSidebarOpen(false)}
               className="p-2 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors duration-200 text-cyan-300 hover:text-cyan-200"
             >
               <X className="h-6 w-6" />

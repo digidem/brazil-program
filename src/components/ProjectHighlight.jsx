@@ -5,7 +5,7 @@ import { Check, Wrench } from 'lucide-react';
 const ProjectHighlight = ({ project }) => {
   return (
     <section className="mb-16 px-4">
-      <motion.h2 
+      <motion.h2
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -20,7 +20,7 @@ const ProjectHighlight = ({ project }) => {
           <h4 className="text-2xl font-semibold mb-4 text-white">Objectives:</h4>
           <ul className="space-y-4 mb-6">
             {project.objectives.map((objective, index) => (
-              <motion.li 
+              <motion.li
                 key={index}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}

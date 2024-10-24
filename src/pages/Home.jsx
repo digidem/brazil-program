@@ -47,7 +47,7 @@ const Home = () => {
   React.useEffect(() => {
     const handleScroll = () => {
       if (!mapRef.current) return;
-      
+
       const mapPosition = mapRef.current.getBoundingClientRect().top;
       if (mapPosition > 0 && mapPosition < 150) {
         mapRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -68,14 +68,14 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       <Hero scrollToMap={scrollToMap} />
-      <MapSection 
+      <MapSection
         mapRef={mapRef}
         filteredPartners={filteredPartners}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
         setIsSidebarOpen={setIsSidebarOpen}
       />
-      <Sidebar 
+      <Sidebar
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
         partners={partners}
