@@ -9,6 +9,7 @@ const queryClient = new QueryClient();
 
 // Get the base URL from the environment variable or use a default
 const baseUrl = import.meta.env.BASE_URL || `/`;
+console.log(baseUrl);
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
