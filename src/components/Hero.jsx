@@ -5,7 +5,7 @@ import { ChevronDown } from 'lucide-react';
 const Hero = ({ scrollToMap }) => {
   return (
     <header className="hero-parallax relative h-screen flex items-center justify-center overflow-hidden">
-      <div 
+      <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
           backgroundImage: "url('https://picsum.photos/seed/hero/1920/1080')",
@@ -20,7 +20,7 @@ const Hero = ({ scrollToMap }) => {
       >
         <h1 className="text-6xl font-bold mb-4 fade-in text-white">Defending Indigenous Lands</h1>
         <p className="text-xl mb-8 fade-in text-white">Together with our partners, we're preserving our planet's heritage.</p>
-        <button 
+        <button
           onClick={scrollToMap}
           className="text-lg px-8 py-3 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 neon-glow"
         >
@@ -32,7 +32,8 @@ const Hero = ({ scrollToMap }) => {
           transition={{ delay: 1, duration: 1, repeat: Infinity, repeatType: 'reverse' }}
           className="mt-8 flex justify-center"
         >
-          <ChevronDown size={32} className="text-white" />
+          <ChevronDown onClick={scrollToMap}
+            size={32} className="text-white cursor" />
         </motion.div>
       </motion.div>
     </header>

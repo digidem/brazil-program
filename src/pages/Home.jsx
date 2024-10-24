@@ -43,6 +43,21 @@ const Home = () => {
     mapRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  // Auto-scroll to map when within 150px
+  React.useEffect(() => {
+    const handleScroll = () => {
+      if (!mapRef.current) return;
+      
+      const mapPosition = mapRef.current.getBoundingClientRect().top;
+      if (mapPosition > 0 && mapPosition < 150) {
+        mapRef.current.scrollIntoView({ behavior: 'smooth' });
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   if (isLoading) return <div className="text-white text-center py-20">Loading...</div>;
   if (error) return <div className="text-white text-center py-20">An error occurred: {error.message}</div>;
 
